@@ -15,6 +15,10 @@ for row in rows:
     fobcur = conn.cursor()
     fobcur.execute("SELECT * from novuskey WHERE id = %s", (row[0],))
     fob = fobcur.fetchone()
-    fob_fc = fob[3].split(":")[1].split("-")[0]
-    fob_id = fob[3].split(":")[1].split("-")[1]
-    print "First Name: ", row[3], "\nLast Name: ", row[5], "\nCard FC: ", fob_fc, "\nCard Number: ", fob_id, "\n\n"
+    if fob != None:
+        fob_fc = fob[3].split(":")[1].split("-")[0]
+        fob_id = fob[3].split(":")[1].split("-")[1]
+        accur = conn.cursor()
+        accur.execute("SELECT * from usergroupmember where memberid = %s", (row[0],))
+        ac_group = acccur.fetchall()
+        print "First Name: ", row[3], "\nLast Name: ", row[5], "\nCard FC: ", fob_fc, "\nCard Number: ", fob_id, "\n\n"
