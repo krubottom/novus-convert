@@ -18,7 +18,17 @@ for row in rows:
     if fob != None:
         fob_fc = fob[3].split(":")[1].split("-")[0]
         fob_id = fob[3].split(":")[1].split("-")[1]
+        print "First Name: ", row[3], "\nLast Name: ", row[5], "\nCard FC: ", fob_fc, "\nCard Number: ", fob_id
+
         accur = conn.cursor()
         accur.execute("SELECT * from usergroupmember where memberid = %s", (row[0],))
-        ac_group = acccur.fetchall()
-        print "First Name: ", row[3], "\nLast Name: ", row[5], "\nCard FC: ", fob_fc, "\nCard Number: ", fob_id, "\n\n"
+        ac_group = accur.fetchall()
+        if ac_group != None:
+            print "Access Levels: "
+            for level in ac_group:
+                grp_cur = conn.cursor()
+                grp_cur.execute("SELECT * from usergroup where id = %s", (level[2],))
+                grp_name = grp_cur.fetchall()
+                print "".join([str(x) for x in grp_name[0][1]] )
+            print "\n"
+                # print "\nGroup: ", grp_name[group]
