@@ -29,6 +29,6 @@ for row in rows:
                 grp_cur = conn.cursor()
                 grp_cur.execute("SELECT * from usergroup where id = %s", (level[2],))
                 grp_name = grp_cur.fetchall()
-                print "".join([str(x) for x in grp_name[0][1]] )
+                print "".join('%s'%x for x in grp_name[0][1] )
             print "\n"
                 # print "\nGroup: ", grp_name[group]
