@@ -31,4 +31,3 @@ for row in rows:
                 grp_name = grp_cur.fetchall()
                 print "".join('%s'%x for x in grp_name[0][1] )
             print "\n"
-                # print "\nGroup: ", grp_name[group]
