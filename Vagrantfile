@@ -47,5 +47,8 @@ Vagrant.configure("2") do |config|
    pip install flask
    pip install Flask-AutoIndex
    pip install flask-wtf
+   mkdir /usr/novus-convert
+   cd /usr/novus-convert
+   git clone https://github.com/krubottom/novus-convert
   SHELL
 end
