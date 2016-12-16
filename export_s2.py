@@ -2,7 +2,7 @@ import psycopg2
 import sys
 
 try:
-    conn = psycopg2.connect("dbname='novus6' user='root' host='172.16.171.128' password='novus' port='5432'")
+    conn = psycopg2.connect("dbname='novus6' user='root' host='localhost' password='novus' port='5432'")
 except:
     e = sys.exc_info()[1]
     print e
