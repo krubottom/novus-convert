@@ -1,0 +1,10 @@
+Issue the following command to create an ext3 filesystem on the new volume:
+sudo mkfs -t ext4 /dev/sdf
+Make the directory for mounting the new storage:
+sudo mkdir /mnt/ebs-store
+Mount the new volume:
+sudo mount /dev/sdf /mnt/ebs-store
+To configure the Linux instance to mount this volume on boot, open /etc/fstab in an editor by typing the following:
+sudo nano /etc/fstab
+Append the following line to /etc/fstab:
+/dev/sdf /mnt/ebs-store ext4 defaults,noatime 1 2
