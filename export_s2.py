@@ -35,7 +35,7 @@ for row in rows:
             fob_fc = sub_fob[3].split(":")[1].split("-")[0]
             fob_id = sub_fob[3].split(":")[1].split("-")[1]
         # print "First Name: ", row[3], "\nLast Name: ", row[5], "\nCard FC: ", fob_fc, "\nCard Number: ", fob_id
-            strCredentials = strCredentials + fob_id + "~" + fob_id + "~" + fob_fc + "~Active~~"
+            strCredentials = strCredentials + fob_id + "~" + fob_id + "~FC " + fob_fc + "~Active~~"
         if len(fob) > i:
             strCredentials = strCredentials + "|"
         if i == len(fob):
