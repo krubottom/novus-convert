@@ -30,12 +30,11 @@ for row in rows:
         i = i +1
         if i == 1:
             strCredentials = "{"
-        # print sub_fob
+        # need to add error checking for PIN vs KeyCard
         printStr = 1
         if sub_fob != None:
             fob_fc = sub_fob[3].split(":")[1].split("-")[0]
             fob_id = sub_fob[3].split(":")[1].split("-")[1]
-        # print "First Name: ", row[3], "\nLast Name: ", row[5], "\nCard FC: ", fob_fc, "\nCard Number: ", fob_id
             strCredentials = strCredentials + fob_id + "~" + fob_id + "~FC " + fob_fc + "~Active~~"
         if len(fob) > i:
             strCredentials = strCredentials + "|"
@@ -46,7 +45,7 @@ for row in rows:
         accur.execute("SELECT * from usergroupmember where memberid = %s", (row[0],))
         ac_group = accur.fetchall()
         if ac_group != None:
-            # print "Access Levels: "
+            # Access Levels
             for level in ac_group:
                 grp_cur = conn.cursor()
                 grp_cur.execute("SELECT * from usergroup where id = %s", (level[2],))
