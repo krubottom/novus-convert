@@ -16,7 +16,9 @@ print ("COMMAND,LASTNAME,FIRSTNAME,CREDENTIALS,ACCESSLEVELS")
 for row in rows:
     printStr = 0
     strCommand = "AddPerson,"
+    # Strip out commas in names
     strFirstName = row[3].replace(',', '') + ","
+    # Strip out commas in names
     strLastName = row[5].replace(',', '') + ","
     strCredentials = ""
     strAccessLevel = "{"
