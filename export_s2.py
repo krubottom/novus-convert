@@ -19,6 +19,7 @@ for row in rows:
     strFirstName = row[3].replace(',', '') + ","
     strLastName = row[5].replace(',', '') + ","
     strCredentials = ""
+    strAccessLevel = "{"
 
     fobcur = conn.cursor()
     fobcur.execute("SELECT * from novuskey WHERE ownerid = %s", (row[0],))
@@ -40,19 +41,23 @@ for row in rows:
             strCredentials = strCredentials + "|"
         if i == len(fob):
             strCredentials = strCredentials + "}"
-        # accur = conn.cursor()
-        # accur.execute("SELECT * from usergroupmember where memberid = %s", (row[0],))
-        # ac_group = accur.fetchall()
-        # if ac_group != None:
-        #     print "Access Levels: "
-        #     for level in ac_group:
-        #         grp_cur = conn.cursor()
-        #         grp_cur.execute("SELECT * from usergroup where id = %s", (level[2],))
-        #         grp_name = grp_cur.fetchall()
-        #         print "".join('%s'%x for x in grp_name[0][1] )
-        #     print "\n"
 
-
-
+        accur = conn.cursor()
+        accur.execute("SELECT * from usergroupmember where memberid = %s", (row[0],))
+        ac_group = accur.fetchall()
+        if ac_group != None:
+            # print "Access Levels: "
+            for level in ac_group:
+                grp_cur = conn.cursor()
+                grp_cur.execute("SELECT * from usergroup where id = %s", (level[2],))
+                grp_name = grp_cur.fetchall()
+                ai = 0
+                for ac_level in grp_name:
+                    ai == ai + 1
+                    strAccessLevel = strAccessLevel + ac_level[1]
+                    if len(ac_level) > ai:
+                        strAccessLevel = strAccessLevel + "|"
+                # print "".join('%s'%x for x in grp_name[0][1] )
+    strAccessLevel = strAccessLevel[:-1] + "}"
     if printStr == 1:
-        print strCommand + strFirstName + strLastName + strCredentials
+        print strCommand + strFirstName + strLastName + strCredentials + "," + strAccessLevel
