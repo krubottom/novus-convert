@@ -38,6 +38,7 @@ for row in rows:
             fob_fc = sub_fob[3].split(":")[1].split("-")[0]
             fob_id = sub_fob[3].split(":")[1].split("-")[1]
             strCredentials = strCredentials + fob_id + "~" + fob_id + "~FC " + fob_fc + "~Active~~"
+# convert into :-1
         if len(fob) > i:
             strCredentials = strCredentials + "|"
         if i == len(fob):
