@@ -33,6 +33,7 @@ for row in rows:
         if i == 1:
             strCredentials = "{"
         # need to add error checking for PIN vs KeyCard
+        # PIN does not start with card format, add code to detect
         printStr = 1
         if sub_fob != None:
             fob_fc = sub_fob[3].split(":")[1].split("-")[0]
