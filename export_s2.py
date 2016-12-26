@@ -1,7 +1,7 @@
 import psycopg2
 import sys
 
-# make this be a real check
+# make this be a real check, breakup into def
 
 try:
     conn = psycopg2.connect("dbname='novus6' user='root' host='172.16.171.128' password='novus' port='5432'")
@@ -13,6 +13,7 @@ cur = conn.cursor()
 cur.execute("""SELECT * from person""")
 rows = cur.fetchall()
 
+# need to add PIN
 print ("COMMAND,LASTNAME,FIRSTNAME,CREDENTIALS,ACCESSLEVELS")
 
 for row in rows:
@@ -36,6 +37,7 @@ for row in rows:
             strCredentials = "{"
         # need to add error checking for PIN vs KeyCard
         # PIN does not start with card format, add code to detect
+        # sub_fob.startswith('wg26')
         printStr = 1
         if sub_fob != None:
             fob_fc = sub_fob[3].split(":")[1].split("-")[0]
