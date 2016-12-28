@@ -3,6 +3,7 @@ import sys
 
 # make this be a real check, breakup into def
 
+
 try:
     conn = psycopg2.connect("dbname='novus6' user='root' host='172.16.171.128' password='novus' port='5432'")
 except:
