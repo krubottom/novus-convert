@@ -67,7 +67,7 @@ for row in rows:
     if strPIN.endswith("|"):
         strPIN = strPIN[:-1] + "}"
     else:
-        strPIN = strPIN + "}"
+        strPIN = ""
 
     if printStr == 1:
         print strCommand + strFirstName + strLastName + strCredentials + "," + strAccessLevel + "," + strPIN
