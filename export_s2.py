@@ -3,9 +3,8 @@ import sys
 
 # make this be a real check, breakup into def
 
-
 try:
-    conn = psycopg2.connect("dbname='novus6' user='root' host='172.16.171.128' password='novus' port='5432'")
+    conn = psycopg2.connect("dbname='novus6' user='root' host='172.16.171.130' password='novus' port='5432'")
 except:
     e = sys.exc_info()[1]
     print e
@@ -15,7 +14,7 @@ cur.execute("""SELECT * from person""")
 rows = cur.fetchall()
 
 # need to add PIN
-print ("COMMAND,LASTNAME,FIRSTNAME,CREDENTIALS,ACCESSLEVELS")
+print ("COMMAND,LASTNAME,FIRSTNAME,CREDENTIALS,ACCESSLEVELS,PIN")
 
 for row in rows:
     printStr = 0
@@ -24,8 +23,9 @@ for row in rows:
     strFirstName = row[3].replace(',', '') + ","
     # Strip out commas in names
     strLastName = row[5].replace(',', '') + ","
-    strCredentials = ""
+    strCredentials = "{"
     strAccessLevel = "{"
+    strPIN = "{"
 
     fobcur = conn.cursor()
     fobcur.execute("SELECT * from novuskey WHERE ownerid = %s", (row[0],))
@@ -33,22 +33,18 @@ for row in rows:
     fob = fobcur.fetchall()
     i = 0
     for sub_fob in fob:
-        i = i +1
-        if i == 1:
-            strCredentials = "{"
-        # need to add error checking for PIN vs KeyCard
-        # PIN does not start with card format, add code to detect
-        # sub_fob.startswith('wg26')
-        printStr = 1
-        if sub_fob != None:
+        # print sub_fob[3].startswith("wg26")
+        if not sub_fob[3].startswith("wg26") and sub_fob != None:
+            strPIN = strPIN + sub_fob + "|"
+            printStr = 1
+            # print "PIN" + strPIN
+
+        if sub_fob[3].startswith("wg26") and sub_fob != None:
             fob_fc = sub_fob[3].split(":")[1].split("-")[0]
             fob_id = sub_fob[3].split(":")[1].split("-")[1]
-            strCredentials = strCredentials + fob_id + "~" + fob_id + "~FC " + fob_fc + "~Active~~"
-# convert into :-1
-        if len(fob) > i:
-            strCredentials = strCredentials + "|"
-        if i == len(fob):
-            strCredentials = strCredentials + "}"
+            strCredentials = strCredentials + fob_id + "~" + fob_id + "~FC " + fob_fc + "~Active~~|"
+            printStr = 1
+            # print "Cred: " + strCredentials
 
         accur = conn.cursor()
         accur.execute("SELECT * from usergroupmember where memberid = %s", (row[0],))
@@ -67,5 +63,11 @@ for row in rows:
                         strAccessLevel = strAccessLevel + "|"
                 # print "".join('%s'%x for x in grp_name[0][1] )
     strAccessLevel = strAccessLevel[:-1] + "}"
+    strCredentials = strCredentials[:-1] + "}"
+    if strPIN.endswith("|"):
+        strPIN = strPIN[:-1] + "}"
+    else:
+        strPIN = strPIN + "}"
+
     if printStr == 1:
-        print strCommand + strFirstName + strLastName + strCredentials + "," + strAccessLevel
+        print strCommand + strFirstName + strLastName + strCredentials + "," + strAccessLevel + "," + strPIN
