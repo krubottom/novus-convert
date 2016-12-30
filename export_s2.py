@@ -35,7 +35,7 @@ for row in rows:
     for sub_fob in fob:
         # print sub_fob[3].startswith("wg26")
         if not sub_fob[3].startswith("wg26") and sub_fob != None:
-            strPIN = strPIN + sub_fob + "|"
+            strPIN = sub_fob
             printStr = 1
             # print "PIN" + strPIN
 
@@ -64,10 +64,11 @@ for row in rows:
                 # print "".join('%s'%x for x in grp_name[0][1] )
     strAccessLevel = strAccessLevel[:-1] + "}"
     strCredentials = strCredentials[:-1] + "}"
-    if strPIN.endswith("|"):
-        strPIN = strPIN[:-1] + "}"
-    else:
-        strPIN = ""
+    # A user can only have one PIN
+    # if strPIN.endswith("|"):
+    #     strPIN = strPIN[:-1] + "}"
+    # else:
+    #     strPIN = ""
 
     if printStr == 1:
         print strCommand + strFirstName + strLastName + strCredentials + "," + strAccessLevel + "," + strPIN
