@@ -77,11 +77,11 @@ for row in rows:
 
 # Need to get the server address and userID
 # return a list of Credentials, not the string it currently does
-def GetCredentials(id, server):
+def GetCredentials(uid, server):
     strCredentials = ""
-    conn = psycopg2.connect("dbname='novus6' user='root' host=server password='novus' port='5432'")
+    conn = psycopg2.connect("dbname='novus6' user='root' host=%s password='novus' port='5432'", server)
     fobcur = conn.cursor()
-    fobcur.execute("SELECT * from novuskey WHERE ownerid = id")
+    fobcur.execute("SELECT * from novuskey WHERE ownerid = %s", uid)
     for sub_fob in fob:
         if sub_fob[3].startswith("wg26") and sub_fob != None:
             fob_fc = sub_fob[3].split(":")[1].split("-")[0]
@@ -92,12 +92,30 @@ def GetCredentials(id, server):
 
 # Need to get the server anddress and userID
 # Return a number
-def GetPINs(id, server):
+def GetPINs(uid, server):
     strPIN = ""
-    conn = psycopg2.connect("dbname='novus6' user='root' host=server password='novus' port='5432'")
+    conn = psycopg2.connect("dbname='novus6' user='root' host=%s password='novus' port='5432'", server)
     fobcur = conn.cursor()
-    fobcur.execute("SELECT * from novuskey WHERE ownerid = id")
+    fobcur.execute("SELECT * from novuskey WHERE ownerid = %s", uid)
     for sub_fob in fob:
         if not sub_fob[3].startswith("wg26") and sub_fob != None:
             strPIN = sub_fob
     return strPIN
+
+def GetAccessLevels(id, server):
+    accur = conn.cursor()
+    accur.execute("SELECT * from usergroupmember where memberid = %s", user)
+    ac_group = accur.fetchall()
+    if ac_group != None:
+        # Access Levels
+        for level in ac_group:
+            grp_cur = conn.cursor()
+            grp_cur.execute("SELECT * from usergroup where id = %s", (level[2],))
+            grp_name = grp_cur.fetchall()
+            ai = 0
+            for ac_level in grp_name:
+                ai == ai + 1
+                strAccessLevel = strAccessLevel + ac_level[1]
+                if len(ac_level) > ai:
+                    strAccessLevel = strAccessLevel + "|"
+    return strAccessLevel
