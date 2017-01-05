@@ -72,3 +72,32 @@ for row in rows:
 
     if printStr == 1:
         print strCommand + strFirstName + strLastName + strCredentials + "," + strAccessLevel + "," + strPIN
+
+# Make calls functions
+
+# Need to get the server address and userID
+# return a list of Credentials, not the string it currently does
+def GetCredentials(id, server):
+    strCredentials = ""
+    conn = psycopg2.connect("dbname='novus6' user='root' host=server password='novus' port='5432'")
+    fobcur = conn.cursor()
+    fobcur.execute("SELECT * from novuskey WHERE ownerid = id")
+    for sub_fob in fob:
+        if sub_fob[3].startswith("wg26") and sub_fob != None:
+            fob_fc = sub_fob[3].split(":")[1].split("-")[0]
+            fob_id = sub_fob[3].split(":")[1].split("-")[1]
+            strCredentials = strCredentials + fob_id + "~" + fob_id + "~FC " + fob_fc + "~Active~~|"
+            # print "Cred: " + strCredentials
+    return strCredentials
+
+# Need to get the server anddress and userID
+# Return a number
+def GetPINs(id, server):
+    strPIN = ""
+    conn = psycopg2.connect("dbname='novus6' user='root' host=server password='novus' port='5432'")
+    fobcur = conn.cursor()
+    fobcur.execute("SELECT * from novuskey WHERE ownerid = id")
+    for sub_fob in fob:
+        if not sub_fob[3].startswith("wg26") and sub_fob != None:
+            strPIN = sub_fob
+    return strPIN
