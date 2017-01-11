@@ -23,6 +23,8 @@ for row in rows:
     strFirstName = row[3].replace(',', '') + ","
     # Strip out commas in names
     strLastName = row[5].replace(',', '') + ","
+    # current account in Novus is locked
+    strLocked = row[2]
     strCredentials = "{"
     strAccessLevel = "{"
     strPIN = "{"
