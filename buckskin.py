@@ -13,7 +13,7 @@ cur = conn.cursor()
 cur.execute("""SELECT * from person""")
 rows = cur.fetchall()
 
-print ("COMMAND,LASTNAME,FIRSTNAME,CREDENTIALS,ACCESSLEVELS")
+print ("COMMAND,LASTNAME,FIRSTNAME,CREDENTIALS,NOTES")
 
 for row in rows:
     printStr = 0
@@ -28,7 +28,7 @@ for row in rows:
     else:
         strLocked = "Disabled"
     strCredentials = "{"
-    strAccessLevel = "{"
+    strAccessLevel = ""
     if row[7] != None:
         strAutoDisble = row[7].strftime("%Y-%m-%d")
     else:
@@ -69,11 +69,11 @@ for row in rows:
                     strAccessLevel = strAccessLevel + ac_level[1]
 
                     if len(ac_level) > ai:
-                        strAccessLevel = strAccessLevel + "|"
+                        strAccessLevel = strAccessLevel
                 # print "".join('%s'%x for x in grp_name[0][1] )
 
 
-    strAccessLevel = strAccessLevel[:-1] + "}"
+    # strAccessLevel = strAccessLevel[:-1] + "}"
     strCredentials = strCredentials[:-1] + "}"
 
     if printStr == 1:
