@@ -29,7 +29,10 @@ for row in rows:
         strLocked = "Disabled"
     strCredentials = "{"
     strAccessLevel = "{"
-    strAutoDisble = row[7]
+    if row[7] != None:
+        strAutoDisble = row[7].strftime("%Y-%m-%d")
+    else:
+        strAutoDisble = ""
 
     fobcur = conn.cursor()
     fobcur.execute("SELECT * from novuskey WHERE ownerid = %s", (row[0],))
