@@ -72,4 +72,4 @@ for row in rows:
     #     strPIN = ""
 
     if printStr == 1:
-        print strCommand + strFirstName + strLastName + strCredentials + "," + strAccessLevel + "," + strPIN
+        print strCommand + strFirstName + strLastName + strCredentials + "," + strAccessLevel
