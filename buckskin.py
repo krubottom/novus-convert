@@ -23,9 +23,13 @@ for row in rows:
     # Strip out commas in names
     strLastName = row[5].replace(',', '') + ","
     # current account in Novus is locked
-    strLocked = row[2]
+    if row[2] == 1:
+        strLocked = "Active"
+    else:
+        strLocked = "Disabled"
     strCredentials = "{"
     strAccessLevel = "{"
+    strAutoDisble = row[7]
 
     fobcur = conn.cursor()
     fobcur.execute("SELECT * from novuskey WHERE ownerid = %s", (row[0],))
@@ -36,14 +40,14 @@ for row in rows:
         # print sub_fob[3].startswith("wg26")
         if sub_fob[3].startswith("wg26:255") and sub_fob != None:
             fob_id = sub_fob[3].split(":")[1].split("-")[1]
-            strCredentials = strCredentials + fob_id + "~" + fob_id + "~PIN" + "~Active~~|"
+            strCredentials = strCredentials + fob_id + "~" + fob_id + "~PIN" + "~" + strLocked + "~" + strAutoDisble + "~|"
             printStr = 1
             # print "PIN" + strPIN
 
         if sub_fob[3].startswith("wg26") and sub_fob != None and not sub_fob[3].startswith("wg26:255"):
             fob_fc = sub_fob[3].split(":")[1].split("-")[0]
             fob_id = sub_fob[3].split(":")[1].split("-")[1]
-            strCredentials = strCredentials + fob_id + "~" + fob_id + "~FC " + fob_fc + "~Active~~|"
+            strCredentials = strCredentials + fob_id + "~" + fob_id + "~FC " + fob_fc + "~" + strLocked + "~~|"
             printStr = 1
             # print "Cred: " + strCredentials
 
