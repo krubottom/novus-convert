@@ -13,7 +13,7 @@ cur = conn.cursor()
 cur.execute("""SELECT * from person""")
 rows = cur.fetchall()
 
-print ("COMMAND,LASTNAME,FIRSTNAME,CREDENTIALS,NOTES")
+print ("COMMAND,LASTNAME,FIRSTNAME,CREDENTIALS,NOTES,ACCESSLEVELS")
 
 for row in rows:
     printStr = 0
@@ -43,7 +43,7 @@ for row in rows:
         # print sub_fob[3].startswith("wg26")
         if sub_fob[3].startswith("wg26:255") and sub_fob != None:
             fob_id = sub_fob[3].split(":")[1].split("-")[1]
-            strCredentials = strCredentials + fob_id + "~" + fob_id + "~PIN" + "~" + strLocked + "~" + strAutoDisble + "~|"
+            strCredentials = strCredentials + fob_id + "~" + fob_id + "~PIN" + "~" + strLocked + "~" + strAutoDisble + "~~|"
             printStr = 1
             # print "PIN" + strPIN
 
@@ -77,4 +77,4 @@ for row in rows:
     strCredentials = strCredentials[:-1] + "}"
 
     if printStr == 1:
-        print strCommand + strFirstName + strLastName + strCredentials + "," + strAccessLevel
+        print strCommand + strFirstName + strLastName + strCredentials + "," + strAccessLevel + ",{Gate Access~~~FALSE}"
