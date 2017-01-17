@@ -66,7 +66,7 @@ for row in rows:
                 ai = 0
                 for ac_level in grp_name:
                     ai == ai + 1
-                    strAccessLevel = strAccessLevel + ac_level[1]
+                    strAccessLevel = ac_level[1]
 
                     if len(ac_level) > ai:
                         strAccessLevel = strAccessLevel
