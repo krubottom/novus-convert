@@ -12,11 +12,13 @@ except:
 cur = conn.cursor()
 cur.execute("""SELECT * from person""")
 rows = cur.fetchall()
+strPersionID = 10
 
-print ("COMMAND,LASTNAME,FIRSTNAME,CREDENTIALS,NOTES,ACCESSLEVELS")
+print ("COMMAND,FIRSTNAME,LASTNAME,CREDENTIALS,NOTES,ACCESSLEVELS,PersonID")
 
 for row in rows:
     printStr = 0
+    strPersionID += 1
     strCommand = "AddPerson,"
     # Strip out commas in names
     strFirstName = row[3].replace(',', '') + ","
@@ -33,6 +35,13 @@ for row in rows:
         strAutoDisble = row[7].strftime("%Y-%m-%d")
     else:
         strAutoDisble = ""
+
+    empcur = conn.cursor()
+    empcur.execute("SELECT * from employee WHERE personid = %s", (row[0],))
+    emp = empcur.fetchall()
+    strUDF1 = emp[0][11]
+
+
 
     fobcur = conn.cursor()
     fobcur.execute("SELECT * from novuskey WHERE ownerid = %s", (row[0],))
@@ -69,7 +78,7 @@ for row in rows:
                     strAccessLevel = ac_level[1]
 
                     if len(ac_level) > ai:
-                        strAccessLevel = strAccessLevel
+                        strAccessLevel = strAccessLevel.replace(',', '')
                 # print "".join('%s'%x for x in grp_name[0][1] )
 
 
@@ -77,4 +86,4 @@ for row in rows:
     strCredentials = strCredentials[:-1] + "}"
 
     if printStr == 1:
-        print strCommand + strFirstName + strLastName + strCredentials + "," + strAccessLevel + ",{Gate Access~~~FALSE}"
+        print strCommand + strFirstName + strLastName + strCredentials + "," + strAccessLevel + ",{Gate Access~~~FALSE}," + str(strPersionID) + "," + strUDF1
