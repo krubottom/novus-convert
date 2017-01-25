@@ -14,7 +14,7 @@ cur.execute("""SELECT * from person""")
 rows = cur.fetchall()
 strPersionID = 10
 
-print ("COMMAND,FIRSTNAME,LASTNAME,CREDENTIALS,NOTES,ACCESSLEVELS,PersonID")
+print ("COMMAND,FIRSTNAME,LASTNAME,CREDENTIALS,NOTES,ACCESSLEVELS,PersonID,UDF1,UDF2")
 
 for row in rows:
     printStr = 0
@@ -40,6 +40,7 @@ for row in rows:
     empcur.execute("SELECT * from employee WHERE personid = %s", (row[0],))
     emp = empcur.fetchall()
     strUDF1 = emp[0][11]
+    strUDF2 = emp[0][8]
 
 
 
@@ -86,4 +87,4 @@ for row in rows:
     strCredentials = strCredentials[:-1] + "}"
 
     if printStr == 1:
-        print strCommand + strFirstName + strLastName + strCredentials + "," + strAccessLevel + ",{Gate Access~~~FALSE}," + str(strPersionID) + "," + strUDF1
+        print strCommand + strFirstName + strLastName + strCredentials + "," + strAccessLevel + ",{Gate Access~~~FALSE}," + str(strPersionID) + "," + strUDF1 + "," + strUDF2
