@@ -63,41 +63,14 @@ def upload():
 def form():
 	form = PageForm()
 	if form.validate_on_submit():
-		FormTextField = form.FormTextField.data
-		return render_template('formreturn.html', title='Form Return', textfield=FormTextField, links=site_map_links())
+		ServerAddress = form.FormServerAddress.data
+		return render_template('formreturn.html', title='Form Return', textfield=FormServerAddress, links=site_map_links())
 	return render_template('formentry.html', title='Form Entry', form=form, links=site_map_links())
 
 # Generates page with a list of all @app.route's
 @app.route("/site-map")
 def site_map():
     return render_template("site_map.html", links=site_map_links())
-
-# RESTful API example will go here, doesn't do anything yet
-@app.route("/api")
-def api():
-	return "api"
-
-
-# Status page with simple checks
-@app.route("/status")
-def status():
-	return render_template("status.html", links=site_map_links(), netstatus=check_ping())
-
-# Cookies
-# In progress, not working yet
-# @app.route("/cookie")
-# def cookie():
-	# # Set cookie
-	# resp = make_response(render_template(...))
-    # resp.set_cookie('username', 'the username')
-    # return resp
-	# # Get Cookie
-	# username = request.cookies.get('username')
-
-# @app.route("/nav")
-# def nav():
-# 	links = site_map_links()
-# 	return render_template("nav.html", links=links)
 
 def site_map_links():
 	links = []
@@ -109,15 +82,33 @@ def site_map_links():
 			links.append((url, rule.endpoint))
 	return links
 
-def allowed_file(filename):
-	return '.' in filename and filename.rsplit('.', 1)[1].lower() in app.config['ALLOWED_EXTENSIONS']
+def GetAccessLevels(id, server):
+    accur = conn.cursor()
+    accur.execute("SELECT * from usergroupmember where memberid = %s", user)
+    ac_group = accur.fetchall()
+    if ac_group != None:
+        # Access Levels
+        for level in ac_group:
+            grp_cur = conn.cursor()
+            grp_cur.execute("SELECT * from usergroup where id = %s", (level[2],))
+            grp_name = grp_cur.fetchall()
+            ai = 0
+            for ac_level in grp_name:
+                ai == ai + 1
+                strAccessLevel = strAccessLevel + ac_level[1]
+                if len(ac_level) > ai:
+                    strAccessLevel = strAccessLevel + "|"
+    return strAccessLevel
 
-def check_ping():
-    hostname = "8.8.8.8"
-    response = os.system("ping -c 1 " + hostname)
-    if response == 0:
-        netstatus = "Green"
-    else:
-        netstatus = "Red"
-
-    return netstatus
+def GetCredentials(uid, server):
+    strCredentials = ""
+    conn = psycopg2.connect("dbname='novus6' user='root' host=%s password='novus' port='5432'", server)
+    fobcur = conn.cursor()
+    fobcur.execute("SELECT * from novuskey WHERE ownerid = %s", uid)
+    for sub_fob in fob:
+        if sub_fob[3].startswith("wg26") and sub_fob != None:
+            fob_fc = sub_fob[3].split(":")[1].split("-")[0]
+            fob_id = sub_fob[3].split(":")[1].split("-")[1]
+            strCredentials = strCredentials + fob_id + "~" + fob_id + "~FC " + fob_fc + "~Active~~|"
+            # print "Cred: " + strCredentials
+    return strCredentials
