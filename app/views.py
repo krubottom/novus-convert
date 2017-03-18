@@ -9,7 +9,7 @@ from .forms import PageForm
 
 # Return a generic static HTML page as base page
 @app.route("/")
-def index():
+def Main():
 	return render_template('index.html', title='Home', links=site_map_links())
 
 # Show directory of files for download
@@ -17,7 +17,7 @@ def index():
 @app.route('/files/', defaults={'req_path': ''})
 @app.route('/files/<path:req_path>')
 @app.route('/files')
-def files(req_path):
+def Files(req_path):
     BASE_DIR = 'app/files'
 
     # Joining the base and the requested path
@@ -38,18 +38,14 @@ def files(req_path):
 
 # Form to convert
 @app.route("/convert", methods = ['GET', 'POST'])
-def form():
+def Convert():
 	form = PageForm()
 	if form.validate_on_submit():
-		ServerAddress = form.FormServerAddress.data
-		uid = form.Formuid.data
+		ServerAddress = form.ServerAddress.data
+		uid = form.uid.data
+		TestExport(ServerAddress)
 		return render_template('formreturn.html', title='Novus Return', textfield=TestDef(uid,ServerAddress), links=site_map_links())
 	return render_template('formentry.html', title='Details Entry', form=form, links=site_map_links())
-
-# Generates page with a list of all @app.route's
-@app.route("/site-map")
-def site_map():
-    return render_template("site_map.html", links=site_map_links())
 
 def site_map_links():
 	links = []
@@ -94,5 +90,10 @@ def GetCredentials(uid, server):
 
 
 def TestDef(uid, server):
-    returnText = "test sesrver %s with id %s", (server,uid)
+    returnText = "test server " + server + " with id " + uid
     return returnText
+
+def TestExport(server):
+	novus_export = open('app/files/test.csv', 'w+')
+	novus_export.write(server)
+	novus_export.close

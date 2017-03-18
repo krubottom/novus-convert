@@ -3,8 +3,8 @@
     <div>
       <form action="" method="post" name="PageForm">
         {{ form.hidden_tag() }}
-        <p>Enter: {{ form.ServerAddress(size=30) }}</p>
-        <p>uid: {{ form.uid(size=30} )}}</p>
+        <p>Server Address: {{ form.ServerAddress(size=30) }}</p>
+        <p>uid: {{ form.uid(size=30) }}</p>
         {% for error in form.ServerAddress.errors %}
             <span style="color: red;">[{{ error }}]</span>
         {% endfor %}

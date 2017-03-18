@@ -1,3 +1,4 @@
 *.vhdx
 .vagrant/machines/default/hyperv/private_key
 .vagrant/machines/default/hyperv/creator_uid
+*.pyc
