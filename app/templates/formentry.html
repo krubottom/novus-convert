@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block content %}
+    <div>
+      <form action="" method="post" name="PageForm">
+        {{ form.hidden_tag() }}
+        <p>Enter: {{ form.FormTextField(size=30) }}</p>
+        {% for error in form.FormTextField.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+        {% endfor %}
+        <p><input type="submit" value="Submit"></p>
+      </form>
+    </div>
+{% endblock %}
