@@ -59,13 +59,14 @@ def upload():
 	return render_template('upload.html', title="Upload File", links=site_map_links())
 
 # Example form
-@app.route("/form", methods = ['GET', 'POST'])
+@app.route("/convert", methods = ['GET', 'POST'])
 def form():
 	form = PageForm()
 	if form.validate_on_submit():
 		ServerAddress = form.FormServerAddress.data
-		return render_template('formreturn.html', title='Form Return', textfield=FormServerAddress, links=site_map_links())
-	return render_template('formentry.html', title='Form Entry', form=form, links=site_map_links())
+		uid = form.Formuid.data
+		return render_template('formreturn.html', title='Novus Return', textfield=TestDef(uid,ServerAddress), links=site_map_links())
+	return render_template('formentry.html', title='Details Entry', form=form, links=site_map_links())
 
 # Generates page with a list of all @app.route's
 @app.route("/site-map")
@@ -112,3 +113,8 @@ def GetCredentials(uid, server):
             strCredentials = strCredentials + fob_id + "~" + fob_id + "~FC " + fob_fc + "~Active~~|"
             # print "Cred: " + strCredentials
     return strCredentials
+
+
+def TestDef(uid, server):
+    returnText = "test sesrver %s with id %s", (server,uid)
+    return returnText
