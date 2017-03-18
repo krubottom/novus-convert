@@ -7,10 +7,6 @@ from flask import render_template, flash, redirect, url_for, abort, send_file, r
 from werkzeug import secure_filename
 from .forms import PageForm
 
-# import sys
-# sys.path.append('../libs')
-# import lib
-
 # Return a generic static HTML page as base page
 @app.route("/")
 def index():
@@ -40,25 +36,7 @@ def files(req_path):
     files = os.listdir(abs_path)
     return render_template('files.html', files=files, links=site_map_links())
 
-# Uploading files
-# Upload path is set in config.py
-@app.route('/upload', methods = ['GET', 'POST'])
-def upload():
-	if request.method == 'POST':
-		if 'file' not in request.files:
-			flash('No file part')
-			return redirect(request.url)
-		file = request.files['file']
-		if file.filename == '':
-			flash('No selected file')
-			return redirect(request.url)
-		if file and allowed_file(file.filename):
-			filename = secure_filename(file.filename)
-			file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-			return filename + " uploaded"
-	return render_template('upload.html', title="Upload File", links=site_map_links())
-
-# Example form
+# Form to convert
 @app.route("/convert", methods = ['GET', 'POST'])
 def form():
 	form = PageForm()
