@@ -1,11 +1,14 @@
 from app import app
+import psycopg2
 import os
 import socket
 import json
 import urllib2
+import time
 from flask import render_template, flash, redirect, url_for, abort, send_file, request
 from werkzeug import secure_filename
 from .forms import PageForm
+
 
 # Return a generic static HTML page as base page
 @app.route("/")
@@ -75,25 +78,45 @@ def GetAccessLevels(id, server):
                     strAccessLevel = strAccessLevel + "|"
     return strAccessLevel
 
-def GetCredentials(uid, server):
-    strCredentials = ""
-    conn = psycopg2.connect("dbname='novus6' user='root' host=%s password='novus' port='5432'", server)
-    fobcur = conn.cursor()
-    fobcur.execute("SELECT * from novuskey WHERE ownerid = %s", uid)
-    for sub_fob in fob:
-        if sub_fob[3].startswith("wg26") and sub_fob != None:
-            fob_fc = sub_fob[3].split(":")[1].split("-")[0]
-            fob_id = sub_fob[3].split(":")[1].split("-")[1]
-            strCredentials = strCredentials + fob_id + "~" + fob_id + "~FC " + fob_fc + "~Active~~|"
-            # print "Cred: " + strCredentials
-    return strCredentials
-
-
 def TestDef(uid, server):
     returnText = "test server " + server + " with id " + uid
     return returnText
 
 def TestExport(server):
-	novus_export = open('app/files/test.csv', 'w+')
-	novus_export.write(server)
+	conn = psycopg2.connect("dbname='novus6' user='root' host='" + server + "' password='novus' port='5432'")
+	cur = conn.cursor()
+	cur.execute("""SELECT * from person""")
+	rows = cur.fetchall()
+	novus_export = open('app/files/' + time.strftime("%Y%m%d-%H%M%S") + '.csv', 'w+')
+	for row in rows:
+		strCommand = "AddPerson,"
+
+		strFirstName = row[3].replace(',', '') + ","
+		strLastName = row[5].replace(',', '') + ","
+
+		if row[2] == 1:
+			strLocked = "Active"
+		else:
+			strLocked = "Disabled"
+
+		strCredentials = "{"
+
+		fobcur = conn.cursor()
+		fobcur.execute("SELECT * from novuskey WHERE ownerid = %s", (row[0],))
+		fob = fobcur.fetchall()
+		for sub_fob in fob:
+			if sub_fob[3].startswith("wg26") and sub_fob != None:
+				fob_fc = sub_fob[3].split(":")[1].split("-")[0]
+				fob_id = sub_fob[3].split(":")[1].split("-")[1]
+				strCredentials = strCredentials + fob_id + "~" + fob_id + "~FC " + fob_fc + "~Active~~|"
+		strCredentials = strCredentials[:-1] + "}"
+
+		strAccessLevel = ""
+
+		if row[7] != None:
+			strAutoDisble = row[7].strftime("%Y-%m-%d")
+		else:
+			strAutoDisble = ""
+
+		novus_export.write(strFirstName + strLastName + strCredentials + "\n")
 	novus_export.close
