@@ -7,4 +7,5 @@ from wtforms.validators import DataRequired
 class PageForm(Form):
     ServerAddress = StringField('FormServerAddress', validators=[DataRequired()])
     uid = StringField('Formuid', validators=[DataRequired()])
+    SiteName = StringField('FormSiteName', validators=[DataRequired()])
     #remember_me = BooleanField('remember_me', default=False)

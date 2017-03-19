@@ -46,7 +46,8 @@ def Convert():
 	if form.validate_on_submit():
 		ServerAddress = form.ServerAddress.data
 		uid = form.uid.data
-		TestExport(ServerAddress)
+		SiteName = form.SiteName.data
+		TestExport(ServerAddress,uid,SiteName)
 		return render_template('formreturn.html', title='Novus Return', textfield=TestDef(uid,ServerAddress), links=site_map_links())
 	return render_template('formentry.html', title='Details Entry', form=form, links=site_map_links())
 
@@ -82,13 +83,14 @@ def TestDef(uid, server):
     returnText = "test server " + server + " with id " + uid
     return returnText
 
-def TestExport(server):
+def TestExport(server,uid,sitename):
 	conn = psycopg2.connect("dbname='novus6' user='root' host='" + server + "' password='novus' port='5432'")
 	cur = conn.cursor()
 	cur.execute("""SELECT * from person""")
 	rows = cur.fetchall()
-	novus_export = open('app/files/' + time.strftime("%Y%m%d-%H%M%S") + '.csv', 'w+')
+	novus_export = open('app/files/' + sitename + "-" + time.strftime("%Y%m%d-%H%M%S") + '.csv', 'w+')
 	for row in rows:
+		strHasFob = False
 		strCommand = "AddPerson,"
 
 		strFirstName = row[3].replace(',', '') + ","
@@ -109,6 +111,7 @@ def TestExport(server):
 				fob_fc = sub_fob[3].split(":")[1].split("-")[0]
 				fob_id = sub_fob[3].split(":")[1].split("-")[1]
 				strCredentials = strCredentials + fob_id + "~" + fob_id + "~FC " + fob_fc + "~Active~~|"
+				strHasFob = True
 		strCredentials = strCredentials[:-1] + "}"
 
 		strAccessLevel = ""
@@ -118,5 +121,6 @@ def TestExport(server):
 		else:
 			strAutoDisble = ""
 
-		novus_export.write(strFirstName + strLastName + strCredentials + "\n")
+		if strHasFob:
+			novus_export.write(strFirstName + strLastName + strCredentials + "\n")
 	novus_export.close
