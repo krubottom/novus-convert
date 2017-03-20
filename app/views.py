@@ -92,6 +92,7 @@ def TestExport(server,uid,sitename):
 	novus_export.write("COMMAND,FIRSTNAME,LASTNAME,CREDENTIALS,NOTES,ACCESSLEVELS,PersonID\n")
 	for row in rows:
 		strHasFob = False
+
 		strCommand = "AddPerson,"
 
 		strFirstName = row[3].replace(',', '') + ","
@@ -123,5 +124,5 @@ def TestExport(server,uid,sitename):
 			strAutoDisble = ""
 
 		if strHasFob:
-			novus_export.write(strFirstName + strLastName + strCredentials + "notes,accesslevel,id\n")
+			novus_export.write(strCommand + strFirstName + strLastName + strCredentials + "notes,accesslevel,id\n")
 	novus_export.close
