@@ -89,6 +89,7 @@ def TestExport(server,uid,sitename):
 	cur.execute("""SELECT * from person""")
 	rows = cur.fetchall()
 	novus_export = open('app/files/' + sitename + "-" + time.strftime("%Y%m%d-%H%M%S") + '.csv', 'w+')
+	novus_export.write("COMMAND,FIRSTNAME,LASTNAME,CREDENTIALS,NOTES,ACCESSLEVELS,PersonID\n")
 	for row in rows:
 		strHasFob = False
 		strCommand = "AddPerson,"
@@ -122,5 +123,5 @@ def TestExport(server,uid,sitename):
 			strAutoDisble = ""
 
 		if strHasFob:
-			novus_export.write(strFirstName + strLastName + strCredentials + "\n")
+			novus_export.write(strFirstName + strLastName + strCredentials + "notes,accesslevel,id\n")
 	novus_export.close
