@@ -4,7 +4,7 @@ import sys
 # make this be a real check, breakup into def
 
 try:
-    conn = psycopg2.connect("dbname='novus6' user='root' host='127.0.0.1' password='novus' port='5432'")
+    conn = psycopg2.connect("dbname='novus6' user='root' host='192.168.118.205' password='novus' port='5432'")
 except:
     e = sys.exc_info()[1]
     print e
